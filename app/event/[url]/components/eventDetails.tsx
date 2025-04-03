@@ -61,7 +61,7 @@ const EventDetail: React.FC = () => {
               />
               <Heading type={1} color='white' text={event?.title || 'Event name'} />
               <Heading type={5} color='white' text='Tue, Sep 21, 2024 19:00' />
-              <Heading type={6} color='white' text='Royal Albert Hall' />
+              <Heading type={6} color='white' text={event?.location || 'Event location'} />
             </div>
           </div>
           <Section className='white-background'>
