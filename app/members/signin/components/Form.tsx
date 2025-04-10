@@ -11,9 +11,10 @@ import useAlert from '@hooks/useAlert';
 import Input from '@components/Form/Input';
 import Button from '@components/Button/Button';
 import Loader from '@components/Loader/Loader';
+import { useAuth } from '@providers/authProvider';
 
 // utils
-import Request, { type IRequest, type IResponse } from '@utils/Request';
+// import Request, { type IRequest, type IResponse } from '@utils/Request';
 
 // interfaces
 interface IFormProps {
@@ -24,6 +25,7 @@ interface IFormProps {
 const Form: React.FC = () => {
   const { showAlert, hideAlert } = useAlert();
 
+  const { login, user, loadingAuth } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const [formValues, setFormValues] = useState<IFormProps>({
     email: '',
@@ -64,26 +66,50 @@ const Form: React.FC = () => {
 
     setLoading(true);
 
-    const parameters: IRequest = {
-      url: 'v1/signin/password',
-      method: 'POST',
-      postData: {
-        email: formValues.email,
-        password: formValues.password,
-      },
-    };
+    // const parameters: IRequest = {
+    //   url: 'v1/signin/password',
+    //   method: 'POST',
+    //   postData: {
+    //     email: formValues.email,
+    //     password: formValues.password,
+    //   },
+    // };
 
-    const req: IResponse = await Request.getResponse(parameters);
+    // const req: IResponse = await Request.getResponse(parameters);
 
-    const { status, data } = req;
+    // const { status, data } = req;
 
-    if (status === 200) {
-      // Handle successful response
-    } else {
-      showAlert({ type: 'error', text: data.title ?? '' });
+    try {
+      await login(formValues.email, formValues.password);
+
+      if (loadingAuth) {
+        return <p>Loading...</p>;
+      }
+
+      showAlert({ type: 'success', text: user?.email || '' });
+      window.location.href = '/';
+    } catch (error: any) {
+      let errorMessage = 'Login failed. Please try again.';
+
+      // Map Firebase error codes to user-friendly messages
+      if (error.message === 'Firebase: Error (auth/invalid-email).') {
+        errorMessage = 'The email address is invalid. Please check your email and try again.';
+      } else if (error.message === 'Firebase: Error (auth/user-not-found).') {
+        errorMessage = 'No account found with this email. Please check your email or sign up.';
+      } else if (error.message === 'Firebase: Error (auth/wrong-password).') {
+        errorMessage = 'The password you entered is incorrect. Please try again.';
+      } else if (error.message === 'Firebase: Error (auth/user-disabled).') {
+        errorMessage = 'Your account has been disabled. Please contact support.';
+      } else if (error.message === 'Firebase: Error (auth/too-many-requests).') {
+        errorMessage = 'Too many failed attempts. Please try again later.';
+      } else if (error.message === 'Firebase: Error (auth/invalid-credential).') {
+        errorMessage = 'Invalid email and password. Please try again later.';
+      }
+
+      showAlert({ type: 'error', text: errorMessage });
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   if (loading) {
@@ -99,7 +125,7 @@ const Form: React.FC = () => {
       }}
     >
       <div className='form-elements'>
-        <div className='form-line'>
+        {/* <div className='form-line'>
           <div className='one-line'>
             <button type='button' className='google-button'>
               <svg
@@ -136,7 +162,8 @@ const Form: React.FC = () => {
         <div className='or-line'>
           <hr />
           <span>OR</span>
-        </div>
+        </div> */}
+
         <div className='form-line'>
           <div className='one-line'>
             <div className='label-line'>

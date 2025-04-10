@@ -11,12 +11,15 @@ import useClickOutside from '@hooks/useClickOutside';
 import Dropdown from '@components/Dropdown/Dropdown';
 import DropdownItem from '@components/Dropdown/DropdownItem';
 import ProfilePhoto from '@components/Profile/ProfilePhoto';
+import { useAuth } from '@providers/authProvider';
+// import { useRouter } from 'next/navigation';
 
 const Header: React.FC = () => {
   const wrapperRef = useRef<any>(null);
 
   const [menu, setMenu] = useState<boolean>(false);
   const [dropdown, setDropdown] = useState<boolean>(false);
+  const { logout, user, userData } = useAuth();
 
   /**
    * This is a functional component for the Header.
@@ -32,6 +35,11 @@ const Header: React.FC = () => {
    */
   const menuState = (): void => {
     setMenu((state) => !state);
+  };
+
+  const handleLogout = async (): Promise<void> => {
+    await logout();
+    window.location.href = 'members/signout';
   };
 
   return (
@@ -73,6 +81,7 @@ const Header: React.FC = () => {
           <Link href='/members/account'>
             <ProfilePhoto image='https://www.cenksari.com/content/profile.jpg' size='small' />
           </Link>
+
           <button
             type='button'
             className='menu-opener'
@@ -80,17 +89,34 @@ const Header: React.FC = () => {
               setDropdown(!dropdown);
             }}
           >
-            Cenk
+            {userData && <>{userData.name}</>}
+
             <span className='material-symbols-outlined'>
               {dropdown ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
             </span>
           </button>
+
           {dropdown && (
             <Dropdown color='gray'>
-              <DropdownItem url='members/tickets' text='My tickets' />
-              <DropdownItem url='members/account' text='My account' />
-              <hr />
-              <DropdownItem url='members/signout' text='Sign out' />
+              {user ? (
+                <>
+                  <DropdownItem url='members/tickets' text='My tickets' />
+                  <DropdownItem url='members/account' text='My account' />
+                  <hr />
+                  <DropdownItem
+                    // url='members/signout'
+                    text='Sign out'
+                    onClick={() => {
+                      handleLogout();
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  <DropdownItem url='members/signin' text='Sign in' />
+                  <DropdownItem url='members/signup' text='Sign up' />
+                </>
+              )}
             </Dropdown>
           )}
         </div>

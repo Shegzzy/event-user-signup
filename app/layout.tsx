@@ -4,13 +4,16 @@ import { type Metadata, type Viewport } from 'next';
 // styles
 import './styles/ui.css';
 import './styles/site.css';
+import LayoutClient from './layoutClient';
 
 // variables
 export const runtime = 'edge';
 
 const RootLayout: React.FC<Readonly<{ children: React.ReactNode }>> = ({ children }) => (
   <html lang='en'>
-    <body>{children}</body>
+    <body>
+      <LayoutClient>{children}</LayoutClient>
+    </body>
   </html>
 );
 

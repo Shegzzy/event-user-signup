@@ -7,6 +7,7 @@ import AlertProvider from '@providers/AlertProvider';
 import Alert from '@components/Alert/Alert';
 import Header from '@components/Header/Header';
 import Footer from '@components/Footer/Footer';
+import AuthProvider from '@providers/authProvider';
 
 // interfaces
 interface IProps {
@@ -15,12 +16,14 @@ interface IProps {
 
 const Master: React.FC<IProps> = ({ children }) => (
   <div className='light-theme'>
-    <AlertProvider>
-      <Alert />
-      <Header />
-      {children}
-      <Footer />
-    </AlertProvider>
+    <AuthProvider>
+      <AlertProvider>
+        <Alert />
+        <Header />
+        {children}
+        <Footer />
+      </AlertProvider>
+    </AuthProvider>
   </div>
 );
 

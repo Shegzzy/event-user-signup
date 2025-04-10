@@ -16,7 +16,7 @@ const Page: React.FC = () => (
         <div className='center'>
           <Heading type={1} color='gray' text='Sign up' />
           <p className='gray form-information'>
-            Create an account to customize your experience for your ticketing journey.{' '}
+            Create an account to sign up for events and get your tickets.{' '}
             <Link href='/members/signin' className='blue'>
               Click here
             </Link>{' '}

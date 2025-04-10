@@ -6,12 +6,13 @@ import Master from '@components/Layout/Master';
 import Section from '@components/Section/Section';
 import Heading from '@components/Heading/Heading';
 import EventCard from '@components/Card/EventCard';
-import CardGroup from '@components/Card/CardGroup';
+// import CardGroup from '@components/Card/CardGroup';
 
 import FormSearch from './home/components/FormSearch';
 import { db } from '../firebase';
 import { getDocs, collection, orderBy, query } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
+import ButtonLink from '@components/Button/ButtonLink';
 // import CircleButtons from './home/components/CircleButtons';
 
 const Page: React.FC = () => {
@@ -28,8 +29,6 @@ const Page: React.FC = () => {
   };
 
   const [events, setEvents] = useState<EventType[]>([]);
-  const [latestEvents, setLatestEvents] = useState<EventType[]>([]);
-  const [otherEvents, setOtherEvents] = useState<EventType[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -43,13 +42,8 @@ const Page: React.FC = () => {
           ...doc.data(),
         })) as EventType[];
 
-        setEvents(eventData);
+        setEvents(eventData.slice(0, 10));
 
-        // Separate latest and other events
-        if (eventData.length > 0) {
-          setLatestEvents(eventData.slice(0, 5));
-          setOtherEvents(eventData.slice(0));
-        }
       } catch (error) {
         console.error('Error fetching events:', error);
       } finally {
@@ -106,88 +100,60 @@ const Page: React.FC = () => {
         </div>
       </Section>
 
-      {
-        loading ? (
-        <p className='container center'>Loading...</p>
-      ) : events.length > 0 ? (
-        <>
-          <CardGroup url='list' title='Latest events' color='blue' background='gray'>
-            {latestEvents.length > 0 && (
-              latestEvents.map((event) => {
-                const eventDate = new Date(event.date);
-                const eventCreatedAt = new Date(event.createdAt.seconds * 1000);
-                const isNew = mostRecentCreatedAt && eventCreatedAt.getTime() === mostRecentCreatedAt.getTime();
+      <Section className='list-cards'>
+        <div className='container center'>
+          {loading ? (
+            <p>Loading...</p>
+          ) : events.length > 0 ? (
+            events.map((event) => {
+              const eventDate = new Date(event.date);
+              const eventCreatedAt = new Date(event.createdAt.seconds * 1000);
+              const isNew =
+                mostRecentCreatedAt && eventCreatedAt.getTime() === mostRecentCreatedAt.getTime();
 
-                return (
-                  <EventCard
-                    key={event.docId}
-                    url={event.id}
-                    speaker={event.speaker || ''}
-                    color='blue'
-                    when={
-                      event.date
-                        ? eventDate.toLocaleDateString('en-US', {
-                            weekday: 'short',
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric',
-                          })
-                        : 'TBA'
-                    }
-                    name={event.title || 'Event name'}
-                    venue={event.location || 'Venue name'}
-                    time={formatTime(event.time) || ''}
-                    image={
-                      event.image ||
-                      'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                    }
-                    isNew={isNew}
-                  />
-                )
-              })
-            )}
-          </CardGroup>
+              return (
+                <EventCard
+                  key={event.docId}
+                  url={event.id}
+                  speaker={event.speaker || ''}
+                  color='blue'
+                  when={
+                    event.date
+                      ? eventDate.toLocaleDateString('en-US', {
+                          weekday: 'short',
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })
+                      : 'TBA'
+                  }
+                  name={event.title || 'Event name'}
+                  venue={event.location || 'Venue name'}
+                  time={formatTime(event.time) || ''}
+                  image={
+                    event.image ||
+                    'https://images.unsplash.com/photo-1531058020387-3be344556be6?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                  }
+                  isNew={isNew} // Pass the isNew prop
+                />
+              );
+            })
+          ) : (
+            <p>No events available</p>
+          )}
+        </div>
+      </Section>
 
-          <CardGroup url='list' title='More events' color='red' background='white'>
-            {otherEvents.length > 0 && (
-                otherEvents.map((event) => {
-                  const eventDate = new Date(event.date);
-                  const eventCreatedAt = new Date(event.createdAt.seconds * 1000);
-                  const isNew = mostRecentCreatedAt && eventCreatedAt.getTime() === mostRecentCreatedAt.getTime();
+      <div className='center'>
+        {events.length > 10 && (<ButtonLink
+            color='blue-filled'
+            text='See all'
+            rightIcon='arrow_forward'
+            url='list'
+          />)}
+      </div>
 
-                  return (
-                    <EventCard
-                      key={event.docId}
-                      url={event.id}
-                      speaker={event.speaker || ''}
-                      color='blue'
-                      when={
-                        event.date
-                          ? eventDate.toLocaleDateString('en-US', {
-                              weekday: 'short',
-                              month: 'short',
-                              day: 'numeric',
-                              year: 'numeric',
-                            })
-                          : 'TBA'
-                      }
-                      name={event.title || 'Event name'}
-                      venue={event.location || 'Venue name'}
-                      time={formatTime(event.time) || ''}
-                      image={
-                        event.image ||
-                        'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                      }
-                      isNew={isNew}
-                    />
-                  )
-                })
-              )}
-          </CardGroup>
-        </>
-      ) : (<p>No event available</p>)
-      }
-
+      <br />
       {/* <CardGroup url='list' title='Editors choice' color='orange' background='gray'>
       <EventCard
         url='1'

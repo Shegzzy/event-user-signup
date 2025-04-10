@@ -2,37 +2,39 @@
 
 import { useState } from 'react';
 
-import Link from 'next/link';
+// import Link from 'next/link';
 
 // hooks
 import useAlert from '@hooks/useAlert';
 
 // components
 import Input from '@components/Form/Input';
-import Switch from '@components/Form/Switch';
+// import Switch from '@components/Form/Switch';
 import Button from '@components/Button/Button';
 import Loader from '@components/Loader/Loader';
+import { useAuth } from '@providers/authProvider';
 
 // utils
-import Request, { type IRequest, type IResponse } from '@utils/Request';
+// import Request, { type IRequest, type IResponse } from '@utils/Request';
 
 // interfaces
 interface IFormProps {
   tos: boolean;
   name: string;
   email: string;
-  lastname: string;
+  mobile: string;
   password: string;
 }
 
 const Form: React.FC = () => {
   const { showAlert, hideAlert } = useAlert();
 
+  const { signUp, user, loadingAuth } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const [formValues, setFormValues] = useState<IFormProps>({
     name: '',
     email: '',
-    lastname: '',
+    mobile: '',
     password: '',
     tos: false,
   });
@@ -44,6 +46,7 @@ const Form: React.FC = () => {
    *
    * @param {React.ChangeEvent<HTMLInputElement>} e - The change event.
    */
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
 
@@ -60,14 +63,14 @@ const Form: React.FC = () => {
    *
    * @param {React.ChangeEvent<HTMLInputElement>} e - The change event.
    */
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, checked } = e.target;
+  // const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  //   const { name, checked } = e.target;
 
-    setFormValues({
-      ...formValues,
-      [name]: checked,
-    });
-  };
+  //   setFormValues({
+  //     ...formValues,
+  //     [name]: checked,
+  //   });
+  // };
 
   /**
    * Handles the form submission event.
@@ -87,26 +90,41 @@ const Form: React.FC = () => {
 
     setLoading(true);
 
-    const parameters: IRequest = {
-      url: 'v1/signin/password',
-      method: 'POST',
-      postData: {
-        email: formValues.email,
-        password: formValues.password,
-      },
-    };
+    // const parameters: IRequest = {
+    //   url: 'v1/signin/password',
+    //   method: 'POST',
+    //   postData: {
+    //     email: formValues.email,
+    //     password: formValues.password,
+    //   },
+    // };
 
-    const req: IResponse = await Request.getResponse(parameters);
+    // const req: IResponse = await Request.getResponse(parameters);
 
-    const { status, data } = req;
+    // const { status, data } = req;
 
-    if (status === 200) {
-      window.location.href = '/members/activate/account';
-    } else {
-      showAlert({ type: 'error', text: data.title ?? '' });
+    // if (status === 200) {
+    //   window.location.href = '/members/activate/account';
+    // } else {
+    //   showAlert({ type: 'error', text: data.title ?? '' });
+    // }
+
+    // setLoading(false);
+
+    try {
+      await signUp(formValues.email, formValues.password, formValues.name, formValues.mobile);
+
+      if (loadingAuth) {
+        return <p>Loading...</p>;
+      }
+
+      showAlert({ type: 'success', text: user?.email || '' });
+      window.location.href = '/';
+    } catch (error: any) {
+      showAlert({ type: 'error', text: error.message || 'Sign up failed. Please try again.' });
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   if (loading) {
@@ -122,7 +140,7 @@ const Form: React.FC = () => {
       }}
     >
       <div className='form-elements'>
-        <div className='form-line'>
+        {/* <div className='form-line'>
           <div className='one-line'>
             <button type='button' className='google-button'>
               <svg
@@ -159,7 +177,8 @@ const Form: React.FC = () => {
         <div className='or-line'>
           <hr />
           <span>OR</span>
-        </div>
+        </div> */}
+
         <div className='form-line'>
           <div className='one-line'>
             <div className='label-line'>
@@ -170,44 +189,47 @@ const Form: React.FC = () => {
               name='name'
               value={formValues.name}
               maxLength={64}
-              placeholder='Enter your name'
+              placeholder='Enter your full name'
               required
               onChange={handleChange}
             />
           </div>
         </div>
+
         <div className='form-line'>
           <div className='one-line'>
             <div className='label-line'>
-              <label htmlFor='lastname'>Last name</label>
+              <label htmlFor='mobile'>Phone Number</label>
             </div>
             <Input
-              type='text'
-              name='lastname'
-              value={formValues.lastname}
-              maxLength={64}
-              placeholder='Enter your last name'
+              type='tel'
+              name='mobile'
+              value={formValues.mobile}
+              maxLength={13}
+              placeholder='Enter your phone number'
               required
               onChange={handleChange}
             />
           </div>
         </div>
+
         <div className='form-line'>
           <div className='one-line'>
             <div className='label-line'>
-              <label htmlFor='email'>E-mail address</label>
+              <label htmlFor='email'>Email address</label>
             </div>
             <Input
               type='email'
               name='email'
               value={formValues.email}
               maxLength={128}
-              placeholder='Enter your e-mail address'
+              placeholder='Enter your email address'
               required
               onChange={handleChange}
             />
           </div>
         </div>
+
         <div className='form-line'>
           <div className='label-line'>
             <label htmlFor='password'>Password</label>
@@ -222,7 +244,8 @@ const Form: React.FC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className='form-line'>
+
+        {/* <div className='form-line'>
           <div className='label-line'>
             <label htmlFor='tos'>Agreements</label>
           </div>
@@ -236,7 +259,8 @@ const Form: React.FC = () => {
               TOS
             </Link>
           </Switch>
-        </div>
+        </div> */}
+
         <div className='form-buttons'>
           <Button type='submit' color='blue-filled' text='Sign up' />
         </div>

@@ -11,15 +11,13 @@ const Page: React.FC = () => (
     <Section className='white-background'>
       <div className='container'>
         <div className='center'>
-          <Heading type={1} color='gray' text='Signed out' />
+          <Heading type={1} color='gray' text='Ticket Generated' />
           <p className='gray form-information'>
-            You are successfully signed out and you can safely return to home page.
+            Your ticket was generated successfully and has been sent to your email address
           </p>
 
           <div className='button-container'>
-            <ButtonLink color='gray-overlay' text='Return to home' url='' />
-            &nbsp; &nbsp;
-            <ButtonLink color='blue-filled' text='Sign in again' url='members/signin' />
+            <ButtonLink color='blue-filled' text='Return to home' url='' />
           </div>
         </div>
       </div>
@@ -27,8 +25,8 @@ const Page: React.FC = () => (
   </Master>
 );
 
-const title = 'Sign out';
-const canonical = 'https://modern-ticketing.com/members/signout';
+const title = 'Ticket generated';
+const canonical = 'https://modern-ticketing.com/members/generated';
 const description = 'Modern ticketing is a modern ticketing solution';
 
 export const metadata: Metadata = {

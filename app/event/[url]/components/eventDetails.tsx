@@ -7,12 +7,13 @@ import Section from '@components/Section/Section';
 import TicketForm from './TicketForm';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { doc, DocumentData, getDoc } from 'firebase/firestore';
+import { collection, doc, DocumentData, getDoc, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '../../../../firebase';
 
 const EventDetail: React.FC = () => {
   const { url } = useParams() ?? {};
-  const [event, setEvent] = useState<DocumentData | null>(null);
+  const [eventDetails, setDetailsEvent] = useState<DocumentData | null>(null);
+  const [events, setEvents] = useState<DocumentData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,11 +25,21 @@ const EventDetail: React.FC = () => {
         const eventRef = doc(db, 'events', url.toString());
         const eventSnap = await getDoc(eventRef);
 
+        const eventQuery = query(collection(db, 'events'), orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(eventQuery);
+
+        const eventData = querySnapshot.docs.map((doc) => ({
+          docId: doc.id,
+          ...doc.data(),
+        }));
+
         if (eventSnap.exists()) {
-          setEvent(eventSnap.data());
+          setDetailsEvent(eventSnap.data());
         } else {
           console.error('Event not found!');
         }
+
+        setEvents(eventData);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -39,10 +50,24 @@ const EventDetail: React.FC = () => {
     fetchData();
   }, [url]);
 
+  const formatTime = (timeString: string) => {
+    if (!timeString) return '';
+
+    const [hours, minutes] = timeString.split(':');
+    const date = new Date();
+    date.setHours(Number(hours), Number(minutes));
+
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+  };
+
   return (
     <>
       {loading ? (
-        <p>Loading event details...</p>
+        <p className='container center'>Loading event details...</p>
       ) : (
         <>
           <div className='blur-cover'>
@@ -59,9 +84,22 @@ const EventDetail: React.FC = () => {
                 }}
                 className='cover-image image'
               />
-              <Heading type={1} color='white' text={event?.title || 'Event name'} />
-              <Heading type={5} color='white' text='Tue, Sep 21, 2024 19:00' />
-              <Heading type={6} color='white' text={event?.location || 'Event location'} />
+              <Heading type={1} color='white' text={eventDetails?.title || 'Event name'} />
+              <Heading
+                type={5}
+                color='white'
+                text={
+                  eventDetails?.date
+                    ? new Date(eventDetails.date).toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })
+                    : 'TBA'
+                }
+              />
+              <Heading type={6} color='white' text={eventDetails?.location || 'Event location'} />
             </div>
           </div>
           <Section className='white-background'>
@@ -70,68 +108,55 @@ const EventDetail: React.FC = () => {
                 <div>
                   <Heading type={4} color='gray' text='Event details' />
                   <div className='paragraph-container gray'>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                      nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                      Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-                      eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
-                      in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                    <p>
-                      Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
-                      doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
-                      veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
-                      ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
-                      consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque
-                      porro quisquam est, qui dolorem ipsum quia dolor sit amet.
-                    </p>
+                    <p>{eventDetails?.description || ''}</p>
                   </div>
                 </div>
                 <div>
                   <div className='ticket-box'>
                     <div className='ticket-box-header'>
-                      <Heading type={4} color='gray' text='Tickets' />
+                      <Heading type={4} color='gray' text='Ticket' />
                     </div>
-                    <TicketForm
-                      data={[
-                        {
-                          id: 1,
-                          name: 'Family',
-                          price: '£10',
-                          ordering: 1,
-                          soldout: true,
-                        },
-                        {
-                          id: 2,
-                          name: 'Adult',
-                          price: '£20',
-                          ordering: 2,
-                        },
-                        {
-                          id: 3,
-                          name: 'Child',
-                          price: '£30',
-                          ordering: 3,
-                          information: 'Information about child tickets',
-                        },
-                      ]}
-                    />
+                    <TicketForm />
                   </div>
                 </div>
               </div>
             </div>
           </Section>
           <CardGroup url='list' title='Other events' color='orange' background='gray'>
-            <EventCard
-              url='1'
-              speaker='20'
-              color='orange'
-              when='Tue, Sep 21, 2024 19:00'
-              name='Event name goes here'
-              venue='Royal Albert Hall'
-              image='https://images.unsplash.com/photo-1531058020387-3be344556be6?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-            />
+            {events.length > 0 ? (
+              events
+                .filter((event) => event.docId !== url)
+                .map((event) => {
+                  const eventDate = new Date(event.date);
+                  return (
+                    <EventCard
+                      key={event.docId}
+                      url={event.id}
+                      speaker={event.speaker || ''}
+                      color='blue'
+                      when={
+                        event.date
+                          ? eventDate.toLocaleDateString('en-US', {
+                              weekday: 'short',
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric',
+                            })
+                          : 'TBA'
+                      }
+                      name={event.title || 'Event name'}
+                      venue={event.location || 'Venue name'}
+                      time={formatTime(event.time) || 'Event time'}
+                      image={
+                        event.image ||
+                        'https://images.unsplash.com/photo-1531058020387-3be344556be6?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                      }
+                    />
+                  );
+                })
+            ) : (
+              <p>No other events</p>
+            )}
           </CardGroup>
         </>
       )}
