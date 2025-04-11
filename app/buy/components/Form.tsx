@@ -59,10 +59,10 @@ const Form: React.FC = () => {
           setEventData(docSnap.data());
           setqrCode(uuidv4);
         } else {
-          console.error('Event not found');
+          throw new Error('Event not found');
         }
       } catch (error) {
-        console.error('Error fetching event:', error);
+        throw new Error('Error fetching event:' + error);
       } finally {
         setLoading(false);
       }
@@ -75,6 +75,7 @@ const Form: React.FC = () => {
     if (canvasRef.current) {
       const imgData = canvasRef.current.toDataURL('image/png');
       setImageData(imgData);
+      console.log(imgData);
     }
   }, [qrCode]);
 
@@ -122,6 +123,7 @@ const Form: React.FC = () => {
       email: userData.email,
       status: 'not checked in',
       eventQr: qrCode,
+      qrImage: imageData,
       timeStamp: serverTimestamp(),
     };
 
@@ -226,7 +228,14 @@ const Form: React.FC = () => {
         </div>
 
         <div className='container center'>
-          <QRCodeCanvas value={qrCode} size={150} ref={canvasRef} level='H' bgColor='white' />
+          <QRCodeCanvas
+            value={qrCode}
+            size={150}
+            ref={canvasRef}
+            level='H'
+            bgColor='white'
+            style={{ display: 'none' }}
+          />
         </div>
 
         <div className='form-buttons'>

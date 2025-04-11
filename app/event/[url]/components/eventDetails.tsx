@@ -9,6 +9,7 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { collection, doc, DocumentData, getDoc, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '../../../../firebase';
+import Image from 'next/image';
 
 const EventDetail: React.FC = () => {
   const { url } = useParams() ?? {};
@@ -36,12 +37,12 @@ const EventDetail: React.FC = () => {
         if (eventSnap.exists()) {
           setDetailsEvent(eventSnap.data());
         } else {
-          console.error('Event not found!');
+          throw new Error('Event not found!!');
         }
 
         setEvents(eventData);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        throw new Error('Error fetching data:' + error);
       } finally {
         setLoading(false);
       }
@@ -80,7 +81,7 @@ const EventDetail: React.FC = () => {
             <div className='cover-info'>
               <div
                 style={{
-                  backgroundImage: `url("https://images.unsplash.com/photo-1531058020387-3be344556be6?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")`,
+                  backgroundImage: `url("/MLS.avif")`,
                 }}
                 className='cover-image image'
               />

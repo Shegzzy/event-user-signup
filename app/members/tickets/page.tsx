@@ -1,4 +1,4 @@
-import Link from 'next/link';
+// import Link from 'next/link';
 
 import { type Metadata } from 'next';
 
@@ -8,6 +8,7 @@ import Section from '@components/Section/Section';
 import Heading from '@components/Heading/Heading';
 import ButtonGroup from '@components/Button/ButtonGroup';
 import ButtonGroupItem from '@components/Button/ButtonGroupItem';
+import TicketBody from './components/TicketBody';
 
 const Page: React.FC = () => (
   <Master>
@@ -29,69 +30,7 @@ const Page: React.FC = () => (
         </div>
       </div>
     </Section>
-    <Section className='white-background'>
-      <div className='container'>
-        <div className='ticket-item'>
-          <div className='item-right'>
-            <h2>21</h2>
-            <p>September</p>
-            <span className='material-symbols-outlined'>qr_code_2</span>
-            <strong>21EX9P</strong>
-            <span className='up-border'></span>
-            <span className='down-border'></span>
-          </div>
-          <div className='item-left'>
-            <h5>Event name goes here</h5>
-            <p>
-              <span className='material-symbols-outlined'>event</span>
-              Tue, Sep 21, 2024 19:00
-            </p>
-            <p>
-              <span className='material-symbols-outlined'>apartment</span>
-              Royal Albert Hall
-            </p>
-            <div className='actions'>
-              <Link href='/members/tickets' title='Download tickets'>
-                <span className='material-symbols-outlined'>download</span>
-              </Link>
-              <Link href='/members/tickets' title='Send tickets'>
-                <span className='material-symbols-outlined'>forward_to_inbox</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        <div className='ticket-item'>
-          <div className='item-right'>
-            <h2>21</h2>
-            <p>September</p>
-            <span className='material-symbols-outlined'>qr_code_2</span>
-            <strong>21EX9P</strong>
-            <span className='up-border'></span>
-            <span className='down-border'></span>
-          </div>
-          <div className='item-left'>
-            <h5>Event name goes here</h5>
-            <p>
-              <span className='material-symbols-outlined'>event</span>
-              Tue, Sep 21, 2024 19:00
-            </p>
-            <p>
-              <span className='material-symbols-outlined'>apartment</span>
-              Royal Albert Hall
-            </p>
-            <div className='actions'>
-              <Link href='/members/tickets' title='Download tickets'>
-                <span className='material-symbols-outlined'>download</span>
-              </Link>
-              <Link href='/members/tickets' title='Send tickets'>
-                <span className='material-symbols-outlined'>forward_to_inbox</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Section>
+    <TicketBody />
   </Master>
 );
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Link from 'next/link';
 
@@ -11,35 +11,39 @@ import useAlert from '@hooks/useAlert';
 import Input from '@components/Form/Input';
 import Button from '@components/Button/Button';
 import Loader from '@components/Loader/Loader';
-import ButtonLink from '@components/Button/ButtonLink';
 
 // utils
-import Request, { type IRequest, type IResponse } from '@utils/Request';
+// import Request, { type IRequest, type IResponse } from '@utils/Request';
+import { useAuth } from '@providers/authProvider';
 
-// interfaces
-interface IProps {
-  data: {
-    name: string;
-    email: string;
-    lastname: string;
-  };
-}
+// inte
 
 interface IFormProps {
   name: string;
   email: string;
-  lastname: string;
+  mobile: string;
 }
 
-const FormMain: React.FC<IProps> = ({ data }) => {
+const FormMain: React.FC = () => {
   const { showAlert, hideAlert } = useAlert();
 
+  const { userData, loadingAuth, updateUserDetails } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const [formValues, setFormValues] = useState<IFormProps>({
-    name: data.name,
-    email: data.email,
-    lastname: data.lastname,
+    name: '',
+    email: '',
+    mobile: '',
   });
+
+  useEffect(() => {
+    if (userData) {
+      setFormValues({
+        name: userData.name || '',
+        email: userData.email || '',
+        mobile: userData.mobile || '',
+      });
+    }
+  }, [userData]);
 
   /**
    * Handles the change event for input fields in the form.
@@ -61,36 +65,27 @@ const FormMain: React.FC<IProps> = ({ data }) => {
    * @param {React.FormEvent<HTMLFormElement>} e - The form submission event.
    * @returns {Promise<any>}
    */
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<any> => {
     e.preventDefault();
-
     hideAlert();
-
     setLoading(true);
 
-    const parameters: IRequest = {
-      url: 'v1/signin/password',
-      method: 'POST',
-      postData: {
-        email: '',
-        password: '',
-      },
-    };
+    try {
+      await updateUserDetails({
+        name: formValues.name,
+        mobile: formValues.mobile,
+      });
 
-    const req: IResponse = await Request.getResponse(parameters);
-
-    const { status, data } = req;
-
-    if (status === 200) {
-      //
-    } else {
-      showAlert({ type: 'error', text: data.title ?? '' });
+      showAlert({ type: 'success', text: 'Profile updated successfully!' });
+    } catch (error: any) {
+      showAlert({ type: 'error', text: error.message ?? 'Something went wrong' });
     }
 
     setLoading(false);
   };
 
-  if (loading) {
+  if (loadingAuth || !userData || loading) {
     return <Loader type='inline' color='gray' text='Hang on a second' />;
   }
 
@@ -106,14 +101,14 @@ const FormMain: React.FC<IProps> = ({ data }) => {
         <div className='form-line'>
           <div className='one-line'>
             <div className='label-line'>
-              <label htmlFor='name'>Name</label>
+              <label htmlFor='name'>Full Name</label>
             </div>
             <Input
               type='text'
               name='name'
               value={formValues.name}
               maxLength={64}
-              placeholder='Enter your name'
+              placeholder='Enter your full name'
               required
               onChange={handleChange}
             />
@@ -122,14 +117,14 @@ const FormMain: React.FC<IProps> = ({ data }) => {
         <div className='form-line'>
           <div className='one-line'>
             <div className='label-line'>
-              <label htmlFor='lastname'>Last name</label>
+              <label htmlFor='mobile'>Phone Number</label>
             </div>
             <Input
               type='text'
-              name='lastname'
-              value={formValues.lastname}
+              name='mobile'
+              value={formValues.mobile}
               maxLength={64}
-              placeholder='Enter your last name'
+              placeholder='Enter your phone number'
               required
               onChange={handleChange}
             />
@@ -173,8 +168,6 @@ const FormMain: React.FC<IProps> = ({ data }) => {
           />
         </div>
         <div className='form-buttons'>
-          <ButtonLink color='gray-overlay' text='Sign out' url='members/signout' />
-          &nbsp; &nbsp;
           <Button type='submit' color='blue-filled' text='Update profile' />
         </div>
       </div>

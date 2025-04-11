@@ -5,7 +5,7 @@ interface IProps {
   url?: string;
   text: string;
   active?: boolean;
-  onClick?: () => void; // Add onClick as optional prop
+  onClick?: () => void;
 }
 
 const DropdownItem: React.FC<IProps> = ({ url, text, active, onClick }) => (

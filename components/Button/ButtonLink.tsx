@@ -2,11 +2,12 @@ import Link from 'next/link';
 
 // interfaces
 interface IProps {
-  url: string;
+  url?: string;
   text: string;
   color: string;
   leftIcon?: string;
   rightIcon?: string;
+  onClick?: () => void;
 }
 
 const ButtonLink: React.FC<IProps> = ({ url, text, color, leftIcon, rightIcon }) => (

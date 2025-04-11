@@ -8,7 +8,7 @@ import ButtonGroup from '@components/Button/ButtonGroup';
 import ButtonGroupItem from '@components/Button/ButtonGroupItem';
 
 import FormMain from './components/FormMain';
-import FormPhoto from './components/FormPhoto';
+// import FormPhoto from './components/FormPhoto';
 
 const Page: React.FC = () => (
   <Master>
@@ -25,21 +25,15 @@ const Page: React.FC = () => (
               <ButtonGroupItem url='members/account' text='My account' active />
             </ButtonGroup>
           </div>
-          <div className='padding-top'>
+          {/* <div className='padding-top'>
             <FormPhoto data='https://www.cenksari.com/content/profile.jpg' />
-          </div>
+          </div> */}
         </div>
       </div>
     </Section>
     <Section className='white-background'>
       <div className='container'>
-        <FormMain
-          data={{
-            name: 'Cenk',
-            lastname: 'SARI',
-            email: 'cenk@cenksari.com',
-          }}
-        />
+        <FormMain />
       </div>
     </Section>
   </Master>

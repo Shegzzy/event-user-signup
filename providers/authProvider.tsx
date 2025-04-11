@@ -17,7 +17,7 @@ interface AuthProviderProps {
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [userData, setUserData] = useState<any | null>(null); // holds data from Firestore
+  const [userData, setUserData] = useState<any | null>(null);
   const [loadingAuth, setLoadingAuth] = useState<boolean>(true);
 
   // Handle auth state changes
@@ -97,6 +97,23 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const updateUserDetails = async (updatedFields: Partial<any>) => {
+    if (!user) throw new Error('No authenticated user.');
+
+    const userRef = doc(db, 'users', user.uid);
+
+    try {
+      await setDoc(userRef, updatedFields, { merge: true });
+
+      setUserData((prev: any) => ({
+        ...prev,
+        ...updatedFields,
+      }));
+    } catch (error: any) {
+      throw new Error('Failed to update user details: ' + error.message);
+    }
+  };
+
   const contextValue: IAuthContext = {
     user,
     userData,
@@ -105,6 +122,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     login,
     logout,
     resetPassword,
+    updateUserDetails,
   };
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
