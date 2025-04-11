@@ -66,7 +66,7 @@ const Header: React.FC = () => {
           <Link href='/' className='gray'>
             Home
           </Link>
-          <Link href='/contact' className='gray'>
+          <Link href='#' className='gray'>
             Contact
           </Link>
           <Link href='/list' className='gray'>
@@ -81,7 +81,7 @@ const Header: React.FC = () => {
           <ButtonLink color='blue-filled' text='Sign in' url={`members/signin`} /> */}
           {!userData && (
             <>
-              <Link href='/members/account'>
+              <Link href='#'>
                 <ProfilePhoto image='/avatar.jpg' size='small' />
               </Link>
             </>
@@ -172,7 +172,7 @@ const Header: React.FC = () => {
                   </Link>
                 </li> */}
                 <li>
-                  <Link href='/contact' className='white'>
+                  <Link href='#' className='white'>
                     Contact
                   </Link>
                 </li>

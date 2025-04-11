@@ -134,9 +134,9 @@ const FormMain: React.FC = () => {
           <div className='one-line'>
             <div className='label-line flex flex-v-center flex-space-between'>
               <label htmlFor='email'>E-mail address</label>
-              <Link href='/members/email' className='blue'>
+              {/* <Link href='/members/email' className='blue'>
                 Change e-mail
-              </Link>
+              </Link> */}
             </div>
             <Input
               type='email'
@@ -153,7 +153,7 @@ const FormMain: React.FC = () => {
         <div className='form-line'>
           <div className='label-line flex flex-v-center flex-space-between'>
             <label htmlFor='password'>Password</label>
-            <Link href='/members/password' className='blue'>
+            <Link href='/members/forgot' className='blue'>
               Change password
             </Link>
           </div>

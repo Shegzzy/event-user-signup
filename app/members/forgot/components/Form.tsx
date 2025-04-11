@@ -9,9 +9,7 @@ import useAlert from '@hooks/useAlert';
 import Input from '@components/Form/Input';
 import Button from '@components/Button/Button';
 import Loader from '@components/Loader/Loader';
-
-// utils
-import Request, { type IRequest, type IResponse } from '@utils/Request';
+import { useAuth } from '@providers/authProvider';
 
 // interfaces
 interface IFormProps {
@@ -20,6 +18,7 @@ interface IFormProps {
 
 const Form: React.FC = () => {
   const { showAlert, hideAlert } = useAlert();
+  const { resetPassword, logout, user, loadingAuth } = useAuth();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [formValues, setFormValues] = useState<IFormProps>({
@@ -60,29 +59,22 @@ const Form: React.FC = () => {
 
     setLoading(true);
 
-    const parameters: IRequest = {
-      url: 'v1/signin/password',
-      method: 'POST',
-      postData: {
-        email: '',
-        password: '',
-      },
-    };
+    try {
+      await resetPassword(formValues.email);
 
-    const req: IResponse = await Request.getResponse(parameters);
-
-    const { status, data } = req;
-
-    if (status === 200) {
-      //
-    } else {
-      showAlert({ type: 'error', text: data.title ?? '' });
+      if (user) {
+        await logout();
+      }
+      showAlert({ type: 'success', text: 'Check your email for password reset' });
+      window.location.href = '/members/signin';
+    } catch (error: any) {
+      showAlert({ type: 'error', text: error.message });
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
-  if (loading) {
+  if (loading || loadingAuth) {
     return <Loader type='inline' color='gray' text='Hang on a second' />;
   }
 

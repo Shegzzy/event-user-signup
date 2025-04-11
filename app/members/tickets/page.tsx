@@ -17,9 +17,7 @@ const Page: React.FC = () => (
         <div className='center'>
           <Heading type={1} color='gray' text='My tickets' />
           <p className='gray form-information'>
-            You can access the tickets you purchased from this page at any time. You can download or
-            send your tickets. Please note: You will not be able to see tickets for events that have
-            already ended or been canceled on this page.
+            You can access and download your generated tickets here.
           </p>
           <div className='button-container'>
             <ButtonGroup color='gray'>

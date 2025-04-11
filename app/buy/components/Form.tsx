@@ -75,7 +75,6 @@ const Form: React.FC = () => {
     if (canvasRef.current) {
       const imgData = canvasRef.current.toDataURL('image/png');
       setImageData(imgData);
-      console.log(imgData);
     }
   }, [qrCode]);
 

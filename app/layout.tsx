@@ -17,7 +17,7 @@ const RootLayout: React.FC<Readonly<{ children: React.ReactNode }>> = ({ childre
   </html>
 );
 
-const title = 'Events';
+const title = 'Nordic Event';
 const canonical = 'https://modern-ticketing.com';
 const description = 'Modern ticketing is a modern ticketing solution';
 
@@ -30,7 +30,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title,
   description,
-  robots: 'noindex, nofollow', // TODO: change in production
+  // robots: 'noindex, nofollow', // TODO: change in production
   keywords: 'modern ticketing',
   alternates: { canonical },
   icons: {

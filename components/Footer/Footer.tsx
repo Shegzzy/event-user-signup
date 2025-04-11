@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
           <Link href='/' className='white'>
             Home
           </Link>
-          <Link href='/contact' className='white'>
+          <Link href='#' className='white'>
             Contact
           </Link>
           {/* <Link href='/venues' className='white'>

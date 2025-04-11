@@ -25,7 +25,7 @@ interface IFormProps {
 const Form: React.FC = () => {
   const { showAlert, hideAlert } = useAlert();
 
-  const { login, user, loadingAuth } = useAuth();
+  const { login, loadingAuth } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const [formValues, setFormValues] = useState<IFormProps>({
     email: '',
@@ -66,19 +66,6 @@ const Form: React.FC = () => {
 
     setLoading(true);
 
-    // const parameters: IRequest = {
-    //   url: 'v1/signin/password',
-    //   method: 'POST',
-    //   postData: {
-    //     email: formValues.email,
-    //     password: formValues.password,
-    //   },
-    // };
-
-    // const req: IResponse = await Request.getResponse(parameters);
-
-    // const { status, data } = req;
-
     try {
       await login(formValues.email, formValues.password);
 
@@ -86,7 +73,7 @@ const Form: React.FC = () => {
         return <p>Loading...</p>;
       }
 
-      showAlert({ type: 'success', text: user?.email || '' });
+      showAlert({ type: 'success', text: 'Logged in successfully' });
       window.location.href = '/';
     } catch (error: any) {
       let errorMessage = 'Login failed. Please try again.';

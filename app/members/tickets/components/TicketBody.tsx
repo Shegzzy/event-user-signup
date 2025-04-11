@@ -2,7 +2,6 @@
 
 import Section from '@components/Section/Section';
 import { DocumentData, query, collection, getDocs, where } from 'firebase/firestore';
-import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
 import { db } from '../../../../firebase';
 import { useAuth } from '@providers/authProvider';

@@ -84,7 +84,7 @@ const Page: React.FC = () => {
         <div className='container'>
           <div className='center'>
             <Heading type={1} color='gray' text='Discover' />
-            <p className='gray'>Discover, search and filter best events in Abuja.</p>
+            <p className='gray'>Discover our events.</p>
           </div>
         </div>
 
@@ -130,11 +130,8 @@ const Page: React.FC = () => {
                   name={event.title || 'Event name'}
                   venue={event.location || 'Venue name'}
                   time={formatTime(event.time) || ''}
-                  image={
-                    event.image ||
-                    'https://images.unsplash.com/photo-1531058020387-3be344556be6?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                  }
-                  isNew={isNew} // Pass the isNew prop
+                  image={'/MLS.avif'}
+                  isNew={isNew}
                 />
               );
             })

@@ -15,8 +15,8 @@ const Page: React.FC = () => (
           <Heading type={1} color='gray' text='Forgot password' />
           <p className='gray form-information'>
             Please enter your registered email address. Instructions for resetting your password
-            will have sent to your email address. If you do not see the email in a few minutes,
-            check your junk mail or spam folder.
+            will be sent to your email address. If you do not see the email in few minutes, your
+            junk mail or spam folder.
           </p>
         </div>
         <Form />

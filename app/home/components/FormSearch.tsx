@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 // hooks
-import useAlert from '@hooks/useAlert';
+// import useAlert from '@hooks/useAlert';
 
 // components
 import Input from '@components/Form/Input';
@@ -14,7 +14,7 @@ interface IFormProps {
 }
 
 const FormSearch: React.FC = () => {
-  const { showAlert } = useAlert();
+  // const { showAlert } = useAlert();
 
   const [formValues, setFormValues] = useState<IFormProps>({
     keyword: '',
@@ -44,12 +44,6 @@ const FormSearch: React.FC = () => {
    */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-
-    const { keyword } = formValues;
-
-    if (keyword === '' || keyword.length < 3) {
-      showAlert({ type: 'error', text: 'Please enter minimum 3 characters for search.' });
-    }
   };
 
   return (
@@ -60,7 +54,7 @@ const FormSearch: React.FC = () => {
           name='keyword'
           value={formValues.keyword}
           maxLength={64}
-          placeholder='Event, venue, artist, keyword'
+          placeholder='Event'
           required
           onChange={handleChange}
         />

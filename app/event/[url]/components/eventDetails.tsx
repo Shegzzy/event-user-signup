@@ -9,7 +9,6 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { collection, doc, DocumentData, getDoc, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '../../../../firebase';
-import Image from 'next/image';
 
 const EventDetail: React.FC = () => {
   const { url } = useParams() ?? {};
