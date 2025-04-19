@@ -29,7 +29,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { v4 as uuidv4 } from 'uuid';
-import emailjs from '@emailjs/browser';
+// import emailjs from '@emailjs/browser';
 import useAlert from '@hooks/useAlert';
 
 // interfaces
@@ -42,7 +42,7 @@ const Form: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [eventData, setEventData] = useState<any>(null);
   const [qrCode, setqrCode] = useState<any>('');
-  const [imageData, setImageData] = useState<string | null>(null);
+  // const [imageData, setImageData] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const { showAlert, hideAlert } = useAlert();
 
@@ -73,8 +73,8 @@ const Form: React.FC = () => {
 
   useEffect(() => {
     if (canvasRef.current) {
-      const imgData = canvasRef.current.toDataURL('image/png');
-      setImageData(imgData);
+      // const imgData = canvasRef.current.toDataURL('image/png');
+      // setImageData(imgData);
     }
   }, [qrCode]);
 
@@ -121,8 +121,8 @@ const Form: React.FC = () => {
       name: userData.name,
       email: userData.email,
       status: 'not checked in',
-      eventQr: qrCode,
-      qrImage: imageData,
+      eventQr: '',
+      qrImage: '',
       timeStamp: serverTimestamp(),
     };
 
@@ -130,7 +130,8 @@ const Form: React.FC = () => {
 
     await setDoc(doc(db, 'attendees', docRef.id), { id: docRef.id }, { merge: true });
 
-    sendEmail(e);
+    window.location.href = '/generated';
+    // sendEmail(e);
   };
 
   // Function to check if the user is already registered
@@ -142,32 +143,32 @@ const Form: React.FC = () => {
     return querySnapshot.docs.length > 0;
   };
 
-  const sendEmail = async (e: React.FormEvent<HTMLFormElement>): Promise<any> => {
-    const serviceId = process.env.NEXT_PUBLIC_EMAIL_SERVICE_ID || '';
-    const templateId = process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID || '';
-    const publicKey = process.env.NEXT_PUBLIC_EMAIL_PUBLIC_KEY;
+  // const sendEmail = async (e: React.FormEvent<HTMLFormElement>): Promise<any> => {
+  //   const serviceId = process.env.NEXT_PUBLIC_EMAIL_SERVICE_ID || '';
+  //   const templateId = process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID || '';
+  //   const publicKey = process.env.NEXT_PUBLIC_EMAIL_PUBLIC_KEY;
 
-    const emailTemplate = {
-      image_url: imageData,
-      name: eventData.title,
-      email: userData.email,
-      speaker: eventData.speaker,
-      date: eventData.date,
-      time: eventData.time,
-      location: eventData.location,
-    };
+  //   const emailTemplate = {
+  //     image_url: imageData,
+  //     name: eventData.title,
+  //     email: userData.email,
+  //     speaker: eventData.speaker,
+  //     date: eventData.date,
+  //     time: eventData.time,
+  //     location: eventData.location,
+  //   };
 
-    try {
-      const response = await emailjs.send(serviceId, templateId, emailTemplate, publicKey);
-      if (response.status === 200) {
-        showAlert({ type: 'success', text: 'Email sent successfully' });
-        window.location.href = '/generated';
-      }
-    } catch (error) {
-      showAlert({ type: 'error', text: 'Failed to send email' });
-      console.error('Email sending error:', error);
-    }
-  };
+  //   try {
+  //     const response = await emailjs.send(serviceId, templateId, emailTemplate, publicKey);
+  //     if (response.status === 200) {
+  //       showAlert({ type: 'success', text: 'Email sent successfully' });
+  //       window.location.href = '/generated';
+  //     }
+  //   } catch (error) {
+  //     showAlert({ type: 'error', text: 'Failed to send email' });
+  //     console.error('Email sending error:', error);
+  //   }
+  // };
 
   if (loading) {
     return <Loader type='inline' color='gray' text='Hang on a second' />;

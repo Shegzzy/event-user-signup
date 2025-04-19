@@ -29,7 +29,7 @@ interface IFormProps {
 const Form: React.FC = () => {
   const { showAlert, hideAlert } = useAlert();
 
-  const { signUp, user, loadingAuth } = useAuth();
+  const { signUp, loadingAuth } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const [formValues, setFormValues] = useState<IFormProps>({
     name: '',
@@ -118,7 +118,7 @@ const Form: React.FC = () => {
         return <p>Loading...</p>;
       }
 
-      showAlert({ type: 'success', text: user?.email || '' });
+      showAlert({ type: 'success', text: 'Signed up successfully' });
       window.location.href = '/';
     } catch (error: any) {
       showAlert({ type: 'error', text: error.message || 'Sign up failed. Please try again.' });
