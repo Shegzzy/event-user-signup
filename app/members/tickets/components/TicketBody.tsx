@@ -95,13 +95,19 @@ const TicketBody: React.FC = () => {
               <div className='item-right'>
                 <h2>{new Date(ticket.eventDate).getDate()}</h2>
                 <p>{new Date(ticket.eventDate).toLocaleString('en-US', { month: 'long' })}</p>
-                <img src={ticket.qrImage} alt='qrcode' />
+                {ticket.qrImage !== '' && <img src={ticket.qrImage} alt='qrcode' />}
+                {ticket.eventQr !== '' && <strong>{ticket.eventQr}</strong>}
                 <span className='up-border'></span>
                 <span className='down-border'></span>
               </div>
 
               <div className='item-left'>
-                <img className='qr-mobile' src={ticket.qrImage} alt='qrcode' />
+                {ticket.eventQr !== '' && <strong>{ticket.eventQr}</strong>}
+                <br />
+                <br />
+                {ticket.qrImage !== '' && (
+                  <img className='qr-mobile' src={ticket.qrImage} alt='qrcode' />
+                )}
 
                 <h5>{ticket.eventName}</h5>
                 <p>
@@ -123,15 +129,17 @@ const TicketBody: React.FC = () => {
                   {ticket.eventSpeaker}
                 </p>
 
-                <div className='actions'>
-                  <button
-                    onClick={() => handleDownload(ticket.docId)}
-                    title='Download ticket'
-                    className='download-btn'
-                  >
-                    <span className='material-symbols-outlined'>download</span>
-                  </button>
-                </div>
+                {ticket.qrImage !== '' && (
+                  <div className='actions'>
+                    <button
+                      onClick={() => handleDownload(ticket.docId)}
+                      title='Download ticket'
+                      className='download-btn'
+                    >
+                      <span className='material-symbols-outlined'>download</span>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ))
