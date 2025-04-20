@@ -102,9 +102,7 @@ const TicketBody: React.FC = () => {
               </div>
 
               <div className='item-left'>
-                {ticket.eventQr !== '' && <strong>{ticket.eventQr}</strong>}
-                <br />
-                <br />
+                {ticket.eventQr !== '' && <strong className='qr-mobile'>{ticket.eventQr}</strong>}
                 {ticket.qrImage !== '' && (
                   <img className='qr-mobile' src={ticket.qrImage} alt='qrcode' />
                 )}
