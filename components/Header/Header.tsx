@@ -66,7 +66,7 @@ const Header: React.FC = () => {
           <Link href='/' className='gray'>
             Home
           </Link>
-          <Link href='#' className='gray'>
+          <Link href='/' className='gray'>
             Contact
           </Link>
           <Link href='/list' className='gray'>

@@ -18,8 +18,9 @@ const RootLayout: React.FC<Readonly<{ children: React.ReactNode }>> = ({ childre
 );
 
 const title = 'Nordic Event';
-const canonical = 'https://modern-ticketing.com';
-const description = 'Modern ticketing is a modern ticketing solution';
+const canonical = 'https://nordicnigeriaconnect.com/event';
+const description =
+  'Nordic Nigeria Connect is an event that connects Nordic and Nigerian businesses.';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -31,12 +32,12 @@ export const metadata: Metadata = {
   title,
   description,
   // robots: 'noindex, nofollow', // TODO: change in production
-  keywords: 'modern ticketing',
+  keywords: 'nordic, nigeria, connect, event, ticketing',
   alternates: { canonical },
   icons: {
     icon: '/favicon.ico',
-    apple: '/logo192.png',
-    shortcut: '/logo192.png',
+    apple: '/apple-touch-icon.png',
+    shortcut: '/apple-touch-icon.png',
   },
   metadataBase: new URL(canonical),
   openGraph: {
@@ -44,8 +45,8 @@ export const metadata: Metadata = {
     description,
     url: canonical,
     type: 'website',
-    images: '/logo192.png',
-    siteName: 'Modern Ticketing',
+    images: '/NNLC.png',
+    siteName: 'Nordic Event',
   },
 };
 
