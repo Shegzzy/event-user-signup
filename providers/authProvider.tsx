@@ -29,20 +29,13 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const userDocRef = doc(db, 'users', currentUser.uid);
         const userDocSnap = await getDoc(userDocRef);
 
-        if (!userDocSnap.exists()) {
-          // If no doc, create one
-          await setDoc(userDocRef, {
-            email: currentUser.email,
-            createdAt: Timestamp.now(),
-          });
-          setUserData({ email: currentUser.email });
-        } else {
+        if (userDocSnap.exists()) {
           setUserData(userDocSnap.data());
+        } else {
+          setUserData(null);
+          logout();
         }
-      } else {
-        setUserData(null);
       }
-
       setLoadingAuth(false);
     });
 
