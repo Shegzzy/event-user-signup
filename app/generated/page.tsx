@@ -13,8 +13,8 @@ const Page: React.FC = () => (
         <div className='center'>
           <Heading type={1} color='gray' text='Ticket Generated' />
           <p className='gray form-information'>
-            Your ticket was generated successfully, expect an email with the ticket details from the
-            Admin.
+            Thanks for expressing your interest in the event, expect an email with the ticket
+            details from the Admin.
           </p>
 
           <div className='button-container'>
@@ -26,7 +26,7 @@ const Page: React.FC = () => (
   </Master>
 );
 
-const title = 'Ticket generated';
+const title = 'Express Interest';
 const canonical = 'https://modern-ticketing.com/members/generated';
 const description = 'Modern ticketing is a modern ticketing solution';
 

@@ -13,10 +13,10 @@ const Page: React.FC = () => {
       <Section className='white-background'>
         <div className='container'>
           <div className='center'>
-            <Heading type={1} color='gray' text='Get your ticket' />
+            <Heading type={1} color='gray' text='Interest' />
             <p className='gray'>
-              Generate your ticket for this event. We will issue and send your ticket to your e-mail
-              address immediately.
+              Express your interest for this event. We will issue and send your ticket to your email
+              address once admin approves.
             </p>
           </div>
 

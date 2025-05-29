@@ -106,7 +106,10 @@ const Form: React.FC = () => {
     // Check if the user is already registered for the event
     const isAlreadyRegistered = await checkIfAlreadyRegistered(user?.uid || '', eventData.id);
     if (isAlreadyRegistered) {
-      showAlert({ type: 'error', text: 'You are already registered for this event.' });
+      showAlert({
+        type: 'error',
+        text: 'You have already expressed your interest fot this event.',
+      });
       return;
     }
 
@@ -211,7 +214,7 @@ const Form: React.FC = () => {
             <thead>
               <tr>
                 <th className='left'>Name</th>
-                <th className='center'>Email.</th>
+                <th className='center'>Email</th>
                 <th className='right'>Phone Number</th>
               </tr>
             </thead>
@@ -239,7 +242,7 @@ const Form: React.FC = () => {
         </div>
 
         <div className='form-buttons'>
-          <Button type='submit' color='blue-filled' text='Get ticket' />
+          <Button type='submit' color='blue-filled' text='Express Interest' />
         </div>
       </div>
     </form>

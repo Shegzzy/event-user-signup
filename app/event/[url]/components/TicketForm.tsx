@@ -62,7 +62,7 @@ const TicketForm: React.FC = () => {
         <Button
           type='submit'
           color='blue-filled'
-          text='Generate ticket'
+          text='Express Interest'
           rightIcon='arrow_forward'
         />
       </form>
