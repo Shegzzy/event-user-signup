@@ -66,7 +66,7 @@ const Header: React.FC = () => {
           <Link href='/' className='gray'>
             Home
           </Link>
-          <Link href='/' className='gray'>
+          <Link href='https://nordicnigeriaconnect.com/contact' className='gray'>
             Contact
           </Link>
           <Link href='/list' className='gray'>
@@ -172,7 +172,7 @@ const Header: React.FC = () => {
                   </Link>
                 </li> */}
                 <li>
-                  <Link href='#' className='white'>
+                  <Link href='https://nordicnigeriaconnect.com/contact' className='white'>
                     Contact
                   </Link>
                 </li>
